@@ -1,6 +1,4 @@
-#
-# wm independent hotkeys
-#
+# Mil4ne - sxhkdrc config
 
 # terminal emulator
 super + Return
@@ -120,9 +118,7 @@ super + ctrl + shift + space
 super + ctrl + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
-# CUSTOM
-alt + super + {Left,Down,Up,Right}
-	~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
+# -------------------- Mis Custom hotkeys -------------------------
 
 # Open Firefox
 super + shift + f
@@ -152,9 +148,3 @@ ctrl + shift + Down
 ctrl + shift + m
 	pamixer --toggle-mute
 
-# ScreenShots
-@Print
-	flameshot full
-
-ctrl + @Print
-	flameshot gui

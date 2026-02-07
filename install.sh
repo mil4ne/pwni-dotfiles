@@ -74,7 +74,7 @@ sudo apt install -y \
   brightnessctl \
   open-vm-tools open-vm-tools-desktop \
   build-essential \
-  zsh \
+  zsh ranger \
   libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev \
   libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev \
   libxcb-xtest0-dev libxcb-shape0-dev
@@ -82,7 +82,7 @@ sudo apt install -y \
 # =========================
 # CONFIG DIRS
 # =========================
-for dir in bspwm sxhkd polybar rofi alacritty picom dunst; do
+for dir in bspwm sxhkd polybar alacritty; do
   mkdir -p "$HOME/.config/$dir"
 done
 
@@ -91,7 +91,7 @@ mkdir -p "$HOME/Wallpapers" "$HOME/.local/share/fonts"
 # =========================
 # COPY CONFIGS
 # =========================
-for cfg in bspwm sxhkd polybar rofi alacritty picom dunst; do
+for cfg in bspwm sxhkd polybar alacritty; do
   [ -d "$BASE_DIR/config/$cfg" ] && cp -r "$BASE_DIR/config/$cfg" "$HOME/.config/"
 done
 

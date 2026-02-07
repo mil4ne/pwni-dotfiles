@@ -6,7 +6,7 @@ super + Return
 
 # program launcher
 super + d
-	rofi -show drun 
+	/home/milane/.config/polybar/blocks/scripts/launcher.sh 
 
 # make sxhkd reload its configuration files:
 super + Escape

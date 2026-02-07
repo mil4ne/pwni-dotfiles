@@ -23,10 +23,10 @@ echo -e "${BLUE}"
 cat << "EOF"
 ██████╗ ██╗    ██╗███╗   ██╗██╗       ██████╗ ██████╗ ███╗   ██╗███████╗
 ██╔══██╗██║    ██║████╗  ██║██║      ██╔════╝██╔═══██╗████╗  ██║██╔════╝
-██████╔╝██║ █╗ ██║██╔██╗ ██║██║█████╗██║     ██║   ██║██╔██╗ ██║█████╗  
-██╔═══╝ ██║███╗██║██║╚██╗██║██║╚════╝██║     ██║   ██║██║╚██╗██║██╔══╝  
-██║     ╚███╔███╔╝██║ ╚████║██║      ╚██████╗╚██████╔╝██║ ╚████║██║     
-╚═╝      ╚══╝╚══╝ ╚═╝  ╚═══╝╚═╝       ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     
+██████╔╝██║ █╗ ██║██╔██╗ ██║██║█████╗██║     ██║   ██║██╔██╗ ██║█████╗
+██╔═══╝ ██║███╗██║██║╚██╗██║██║╚════╝██║     ██║   ██║██║╚██╗██║██╔══╝
+██║     ╚███╔███╔╝██║ ╚████║██║      ╚██████╗╚██████╔╝██║ ╚████║██║
+╚═╝      ╚══╝╚══╝ ╚═╝  ╚═══╝╚═╝       ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝
 
                     P w n i - C o n f
 EOF
@@ -73,7 +73,8 @@ sudo apt install -y \
   pulseaudio-utils pavucontrol \
   brightnessctl \
   open-vm-tools open-vm-tools-desktop \
-  build-essential git \
+  build-essential \
+  zsh \
   libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev \
   libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev \
   libxcb-xtest0-dev libxcb-shape0-dev
@@ -99,47 +100,36 @@ chmod +x "$HOME/.config/polybar/launch.sh"
 chmod +x "$HOME/.config/bspwm/scripts/"* 2>/dev/null || true
 
 # =========================
-# WALLPAPERS & LOCAL FONTS
+# NERD FONT
 # =========================
-cp -f "$BASE_DIR/wallpapers/"* "$HOME/Wallpapers/" || true
-cp -r "$BASE_DIR/fonts/"* "$HOME/.local/share/fonts/" || true
+FONT_DIR1="$HOME/.local/share/fonts/JetBrainsMono"
 
-# =========================
-# NERD FONT (JETBRAINS MONO)
-# =========================
-FONT_DIR="$HOME/.local/share/fonts/JetBrainsMono"
-
-if [ ! -d "$FONT_DIR" ]; then
+if [ ! -d "$FONT_DIR1" ]; then
   echo -e "${GREEN}[+] Installing JetBrainsMono Nerd Font...${RESET}"
-  mkdir -p "$FONT_DIR"
+  mkdir -p "$FONT_DIR1"
   cd /tmp
   wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
-  unzip -q JetBrainsMono.zip -d "$FONT_DIR"
+  unzip -q JetBrainsMono.zip -d "$FONT_DIR1"
   rm JetBrainsMono.zip
-else
-  echo -e "${YELLOW}[*] JetBrainsMono Nerd Font already installed${RESET}"
+fi
+
+FONT_DIR2="$HOME/.local/share/fonts/CascadiaCode"
+
+if [ ! -d "$FONT_DIR2" ]; then
+  echo -e "${GREEN}[+] Installing CascadiaCode Font...${RESET}"
+  mkdir -p "$FONT_DIR2"
+  cd /tmp
+  wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaCode.zip
+  unzip -q CascadiaCode.zip -d "$FONT_DIR2"
+  rm CascadiaCode.zip
 fi
 
 fc-cache -fv > /dev/null
 
 # =========================
-# FONT CHECKS (POLYBAR SAFE)
-# =========================
-echo -e "${GREEN}[+] Verifying fonts...${RESET}"
-
-fc-list | grep -qi "JetBrainsMono Nerd" \
-  && echo -e "  ${GREEN}✔ JetBrainsMono Nerd Font OK${RESET}" \
-  || echo -e "  ${RED}✘ JetBrainsMono Nerd Font MISSING${RESET}"
-
-fc-list | grep -qi "Font Awesome" \
-  && echo -e "  ${GREEN}✔ Font Awesome OK${RESET}" \
-  || echo -e "  ${RED}✘ Font Awesome MISSING${RESET}"
-
-# =========================
-# OH MY ZSH
+# OH MY ZSH (USER)
 # =========================
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  echo "[*] Installing Oh My Zsh..."
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
@@ -147,15 +137,38 @@ ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
 
 git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions" || true
 git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" || true
-git clone https://github.com/zdharma-continuum/fast-syntax-highlighting "$ZSH_CUSTOM/plugins/fast-syntax-highlighting" || true
 
 [ -f "$HOME/.zshrc" ] && mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
 cp "$BASE_DIR/.zshrc" "$HOME/.zshrc"
 
 # =========================
-# ALACRITTY
+# OH MY ZSH (ROOT)
 # =========================
-alacritty migrate || true
+if [ ! -d "/root/.oh-my-zsh" ]; then
+  echo -e "${GREEN}[+] Installing Oh My Zsh for root...${RESET}"
+  sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# =========================
+# POWERLEVEL10K
+# =========================
+echo -e "${GREEN}[+] Installing Powerlevel10k...${RESET}"
+
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+  "$ZSH_CUSTOM/themes/powerlevel10k" || true
+
+sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "$HOME/.zshrc"
+
+sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+  /root/.oh-my-zsh/custom/themes/powerlevel10k || true
+
+sudo sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' /root/.zshrc || true
+
+# =========================
+# DEFAULT SHELL
+# =========================
+chsh -s $(which zsh)
+sudo chsh -s $(which zsh) root
 
 # =========================
 # VMWARE OPTIMIZATIONS
@@ -179,9 +192,8 @@ fi
 # =========================
 echo
 echo "======================================="
-echo " Installation completed successfully 🎉"
+echo " Instalacion completa"
 echo "======================================="
 echo
-echo "[+} Log file: $LOGFILE"
-echo "[+} Select 'bspwm' in your display manager"
-echo "[+} Reboot or re-login to apply everything"
+echo "[+] Log file: $LOGFILE"
+echo "[+] Reboot recommended"

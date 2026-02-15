@@ -44,7 +44,7 @@ fi
 
 command -v apt >/dev/null || { echo "[!] apt not found"; exit 1; }
 
-BASE_DIR="$HOME/custom-linux-workspace"
+BASE_DIR="$HOME/pwni-dotfiles"
 [ -d "$BASE_DIR" ] || { echo "[!] custom-linux-workspace not found"; exit 1; }
 
 # =========================

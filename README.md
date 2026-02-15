@@ -1,6 +1,6 @@
 # Pwni C0nf
 
-- Bspwm
+- Bswpm
 - zsh
 - Alacritty
 - Tmux
